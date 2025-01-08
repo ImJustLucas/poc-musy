@@ -9,8 +9,20 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath:
+        process.env["NODE_ENV"] === "production"
+          ? [".env.production", ".env"]
+          : [
+              ".env.development.local",
+              ".env.local",
+              ".env.development",
+              ".env",
+            ],
+      isGlobal: true,
+    }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      // imports: [ConfigModule],
       useClass: MongoDBConfigService,
       inject: [ConfigService],
     }),
