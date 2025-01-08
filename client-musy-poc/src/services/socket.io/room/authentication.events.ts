@@ -1,14 +1,13 @@
 import { socket } from "..";
 
-const createRoom = (partyName: string) =>
-  socket.emit("party-create", partyName);
+const createRoom = (partyName: string) => socket.emit("room:create", partyName);
 
 const joinRoom = (payload: { partyId: string; pseudo: string }) =>
-  socket.emit("party-join", payload);
+  socket.emit("room:join", payload);
 
-const leaveRoom = (partyId: string) => socket.emit("party-leave", partyId);
+const leaveRoom = (partyId: string) => socket.emit("room:leave", partyId);
 
-const deleteRoom = () => socket.emit("party-delete");
+const deleteRoom = () => socket.emit("room:delete");
 
 export const authRoomEvents = {
   create: createRoom,
