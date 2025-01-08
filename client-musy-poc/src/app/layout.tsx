@@ -19,11 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body
-        className={`${figtree.className} min-h-screen bg-blue700 flex justify-center px-4`}
-      >
-        <div className="max-w-md w-full h-full">{children}</div>
-      </body>
+      <body className={`${figtree.className}`}>{children}</body>
     </html>
   );
 }
