@@ -17,8 +17,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-blue700 max-w-md w-full h-full">
-      <div className="w-full h-screen bg-blue700 flex flex-col items-center justify-center">
+    <div className="bg-blue700 w-full h-full flex justify-center px-4">
+      <div className="w-full max-w-md h-screen flex flex-col items-center justify-center relative text-center">
         <Image
           className={`mb-8 transition-all duration-1000 ${
             loaded ? "w-2/4" : "w-full"
@@ -33,10 +33,13 @@ export default function Home() {
             loaded ? "opacity-100" : "opacity-0"
           }`}
         >
-          <MainButton text="Rejoindre une salle" />
+          <MainButton
+            text="Rejoindre une salle"
+            onClick={() => router.push("/joinRoom")}
+          />
           <MainButton
             text="Créer une salle"
-            onClick={() => router.push("/genre")}
+            onClick={() => router.push("/waitingRoom")}
           />
         </div>
       </div>

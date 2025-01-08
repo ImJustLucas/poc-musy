@@ -8,9 +8,9 @@ const users = ["Paul", "Jean", "Marie", "Lucie", "Sophie", "Pierre", "Jacques"];
 export default function Home() {
   const router = useRouter();
   return (
-    <div className="bg-blue700 max-w-md w-full h-full">
-      <div className="w-full h-screen bg-blue700 flex flex-col items-center pt-24 relative">
-        <div className="text-white text-6xl mb-6">U67GL</div>
+    <div className="bg-blue700 w-full h-full flex justify-center px-4">
+      <div className="w-full max-w-md h-screen flex flex-col items-center relative text-center">
+        <div className="text-white text-6xl mt-20">U67GL</div>
         <div className="flex items-center gap-2 mb-6">
           <div className="text-xl">{users.length}</div>
           <svg

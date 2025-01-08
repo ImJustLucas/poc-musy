@@ -32,9 +32,9 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="bg-blue700 max-w-md w-full h-full">
-      <div className="w-full h-screen bg-blue700 flex flex-col pt-24 relative">
-        <h1 className="text-white text-3xl font-semibold mb-8">
+    <div className="bg-blue700 w-full h-full flex justify-center px-4">
+      <div className="w-full max-w-md h-screen flex flex-col items-center relative text-center">
+        <h1 className="text-white text-3xl font-semibold my-8">
           Selectionner les genres
         </h1>
         <div className="grid grid-cols-3 gap-4">

@@ -5,11 +5,17 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { questions } from "./questions"; // Import questions from the new file
 
+const shuffleArray = (array: any[]) => {
+  return array.sort(() => Math.random() - 0.5);
+};
+
 export default function QCM() {
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(10000); // 10 seconds in milliseconds
   const [currentQuestion, setCurrentQuestion] = useState(() => {
     const randomIndex = Math.floor(Math.random() * questions.length);
-    return questions[randomIndex];
+    const question = questions[randomIndex];
+    question.answers = shuffleArray(question.answers);
+    return question;
   });
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [questionNumber, setQuestionNumber] = useState(1);
@@ -17,8 +23,8 @@ export default function QCM() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
+      setTimeLeft((prev) => (prev > 0 ? prev - 100 : 0)); // Decrease by 100 milliseconds
+    }, 100);
 
     return () => clearInterval(timer);
   }, []);
@@ -27,9 +33,11 @@ export default function QCM() {
     if (selectedAnswer) {
       const timer = setTimeout(() => {
         const randomIndex = Math.floor(Math.random() * questions.length);
-        setCurrentQuestion(questions[randomIndex]);
+        const question = questions[randomIndex];
+        question.answers = shuffleArray(question.answers);
+        setCurrentQuestion(question);
         setSelectedAnswer(null);
-        setTimeLeft(10);
+        setTimeLeft(10000); // Reset to 10 seconds in milliseconds
         setQuestionNumber((prev) => prev + 1);
         const progressBar = document.querySelector(
           ".progress-bar"
@@ -41,7 +49,7 @@ export default function QCM() {
       }, 1000);
 
       if (selectedAnswer === currentQuestion.correctAnswer) {
-        setScore((prev) => prev + timeLeft);
+        setScore((prev) => prev + timeLeft); // Convert milliseconds to seconds
       }
 
       return () => clearTimeout(timer);
@@ -79,7 +87,7 @@ export default function QCM() {
           </div>
           <div className="text-xl mt-16">Question {questionNumber}/10</div>
           <div className="text-white text-lg mt-2">
-            Temps restant: {timeLeft}s
+            Temps restant: {Math.floor(timeLeft / 1000)}s
           </div>
           <div className="text-white text-lg mt-2">Score: {score}</div>
         </div>
