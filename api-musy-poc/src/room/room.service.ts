@@ -1,8 +1,8 @@
-import { InjectModel } from '@nestjs/mongoose';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Room } from './schema/room.schema';
-import { Model } from 'mongoose';
-import { Socket } from 'socket.io';
+import { InjectModel } from "@nestjs/mongoose";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { Room } from "./schema/room.schema";
+import { Model } from "mongoose";
+import { Socket } from "socket.io";
 
 @Injectable()
 export class RoomService {
