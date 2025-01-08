@@ -1,7 +1,8 @@
-import { InjectModel } from "@nestjs/mongoose";
-import { Injectable } from "@nestjs/common";
-import { Room } from "./schema/room.schema";
-import { Model } from "mongoose";
+import { InjectModel } from '@nestjs/mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Room } from './schema/room.schema';
+import { Model } from 'mongoose';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class RoomService {
@@ -9,5 +10,23 @@ export class RoomService {
 
   async findAll(): Promise<Room[]> {
     return this.roomModel.find().exec();
+  }
+
+  getRoom(roomId: string) {
+    return this.roomModel.findById(roomId);
+  }
+
+  async validateRoom(roomId: string) {
+    const room = await this.getRoom(roomId);
+
+    if (!room) {
+      throw new NotFoundException('Room not found');
+    }
+
+    return room;
+  }
+
+  subscribeSocket(socket: Socket, room: Room) {
+    return socket.join(`room_${room._id}`);
   }
 }
