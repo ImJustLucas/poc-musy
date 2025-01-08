@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import Input from "@/components/input";
 import MainButton from "@/components/mainButton";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  const router = useRouter();
+  const [pseudo, setPseudo] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -15,6 +16,22 @@ export default function Home() {
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleCreateRoom = async () => {
+    if (pseudo) {
+      const res = await fetch("http:localhost:1337/room", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ pseudo }),
+      });
+      const { roomId } = await res.json();
+      if (roomId) {
+        window.location.href = `/room/${roomId}`;
+      }
+    }
+  };
 
   return (
     <div className="bg-blue700 w-full h-full flex justify-center px-4">
@@ -33,13 +50,18 @@ export default function Home() {
             loaded ? "opacity-100" : "opacity-0"
           }`}
         >
-          <MainButton
-            text="Rejoindre une salle"
-            onClick={() => router.push("/joinRoom")}
+          <Input
+            placeholder="Pseudo"
+            value={pseudo}
+            onChange={(e) => setPseudo(e.target.value)}
           />
+          <Link href="/joinRoom" className="w-full flex flex-col">
+            <MainButton text="Rejoindre une salle" disabled={!pseudo} />
+          </Link>
           <MainButton
             text="Créer une salle"
-            onClick={() => router.push("/waitingRoom")}
+            disabled={!pseudo}
+            onClick={() => handleCreateRoom()}
           />
         </div>
       </div>

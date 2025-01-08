@@ -1,6 +1,7 @@
 "use client";
 
 import MainButton from "@/components/mainButton";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const users = ["Paul", "Jean", "Marie", "Lucie", "Sophie", "Pierre", "Jacques"];
@@ -26,18 +27,16 @@ export default function Home() {
             />
           </svg>
         </div>
-        <div className="text-xl mb-2">En attente de joueurs</div>
+        <div className="text-xl mb-2">En attente de joueurs...</div>
         <div className="flex flex-col items-center">
           {users.map((user) => (
             <div key={user}>{user}</div>
           ))}
         </div>
         <div className=" w-full flex justify-center absolute bottom-8">
-          <MainButton
-            text="Suivant"
-            className="w-full max-w-60"
-            onClick={() => router.push("./games/qcm")}
-          />
+          <Link href="/games/qcm" className="w-full max-w-60">
+            <MainButton text="Suivant" className="w-full" />
+          </Link>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import GenreSelectBtn from "@/components/genreSelectBtn";
 import MainButton from "@/components/mainButton";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const genres = [
@@ -43,11 +44,13 @@ export default function Home() {
           ))}
         </div>
         <div className=" w-full flex justify-center absolute bottom-8">
-          <MainButton
-            text="Suivant"
-            className="w-full max-w-60"
-            onClick={() => router.push("./waitingRoom")}
-          />
+          <Link href="/waitingRoom" className="w-full max-w-60">
+            <MainButton
+              text="Suivant"
+              className="w-full"
+              onClick={() => router.push("./waitingRoom")}
+            />
+          </Link>
         </div>
       </div>
     </div>

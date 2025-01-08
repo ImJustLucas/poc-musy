@@ -5,6 +5,7 @@ interface MainButtonProps {
   onClick?: () => void;
   className?: string;
   type?: "correct" | "wrong";
+  disabled?: boolean;
 }
 
 const MainButton: React.FC<MainButtonProps> = ({
@@ -12,17 +13,20 @@ const MainButton: React.FC<MainButtonProps> = ({
   onClick,
   className,
   type,
+  disabled = false,
 }) => {
-  const buttonClass =
-    type === "correct"
-      ? "bg-green-500 text-white"
-      : type === "wrong"
-      ? "bg-red-500 text-white"
-      : "bg-white text-blue700 hover:bg-blue100";
+  const buttonClass = disabled
+    ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+    : type === "correct"
+    ? "bg-green-500 text-white"
+    : type === "wrong"
+    ? "bg-red-500 text-white"
+    : "bg-white text-blue700 hover:bg-blue100";
 
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={`${buttonClass} font-medium px-4 min-h-12 rounded-lg duration-200 ${className}`}
     >
       {text}

@@ -1,17 +1,11 @@
 // Join room
 "use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import MainButton from "@/components/mainButton";
 import RoomCard from "@/components/roomCard";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function JoinRoom() {
   const [roomCode, setRoomCode] = useState("");
-  const router = useRouter();
-
-  const handleJoinRoom = () => {
-    router.push(`/room/${roomCode}`);
-  };
 
   return (
     <div className="bg-blue700 w-full h-full flex justify-center px-4">
@@ -19,7 +13,9 @@ export default function JoinRoom() {
         <h1 className="text-white text-3xl font-semibold my-8">
           Liste des salles
         </h1>
-        <RoomCard />
+        <Link href="/waitingRoom" className="w-full">
+          <RoomCard />
+        </Link>
       </div>
     </div>
   );
