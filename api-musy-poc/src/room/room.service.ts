@@ -10,4 +10,8 @@ export class RoomService {
   async findAll(): Promise<Room[]> {
     return this.roomModel.find().exec();
   }
+
+  async createOne(room: Room): Promise<Room> {
+    return this.roomModel.create(room);
+  }
 }
