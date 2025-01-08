@@ -26,16 +26,17 @@ export class RoomGateway implements OnGatewayDisconnect, OnGatewayConnection {
 
   handleDisconnect(client: any) {
     console.log(`User Disconnected: ${client.id}`);
+    // this.roomService.unsubscribeSocket(socket);
   }
 
-  @SubscribeMessage('room:subscribe')
-  async subscribe(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() roomId: string,
-  ) {
-    return this.roomService.subscribeSocket(
-      client,
-      await this.roomService.validateRoom(roomId),
-    );
-  }
+  // @SubscribeMessage('room:subscribe')
+  // async subscribe(
+  //   @ConnectedSocket() client: Socket,
+  //   @MessageBody() roomId: string,
+  // ) {
+  //   return this.roomService.subscribeSocket(
+  //     client,
+  //     await this.roomService.validateRoom(roomId),
+  //   );
+  // }
 }

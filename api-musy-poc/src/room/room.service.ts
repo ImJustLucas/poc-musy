@@ -8,25 +8,31 @@ import { Socket } from 'socket.io';
 export class RoomService {
   constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {}
 
-  async findAll(): Promise<Room[]> {
-    return this.roomModel.find().exec();
-  }
+  // async findAll(): Promise<Room[]> {
+  //   return this.roomModel.find().exec();
+  // }
 
-  getRoom(roomId: string) {
-    return this.roomModel.findById(roomId);
-  }
+  // getRoom(roomId: string) {
+  //   return this.roomModel.findById(roomId);
+  // }
 
-  async validateRoom(roomId: string) {
-    const room = await this.getRoom(roomId);
+  // async validateRoom(roomId: string) {
+  //   const room = await this.getRoom(roomId);
 
-    if (!room) {
-      throw new NotFoundException('Room not found');
-    }
+  //   if (!room) {
+  //     throw new NotFoundException('Room not found');
+  //   }
 
-    return room;
-  }
+  //   return room;
+  // }
 
-  subscribeSocket(socket: Socket, room: Room) {
-    return socket.join(`room_${room._id}`);
-  }
+  // subscribeSocket(socket: Socket, room: Room) {
+  //   return socket.join(`room_${room._id}`);
+  // }
+
+  // async unsubscribeSocket(socket: Socket, user: User) {
+  //   await this.socketConnectionService.delete(socket);
+
+  //   return socket.leave(`user_${user._id}`);
+  // }
 }

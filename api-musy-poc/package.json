@@ -5,6 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "type": "commonjs",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -24,6 +25,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/mongoose": "^10.1.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-fastify": "^10.4.15",
     "@nestjs/platform-socket.io": "^10.4.15",
     "@nestjs/websockets": "^10.4.15",
     "mongoose": "^8.9.3",

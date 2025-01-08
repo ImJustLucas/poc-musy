@@ -1,6 +1,6 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
-import { RoomTypes } from "@/../../shared-types";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
+import { RoomTypes } from '@/shared/shared-types';
 
 export type RoomDocument = HydratedDocument<Room>;
 
@@ -12,7 +12,7 @@ export class Room implements RoomTypes.Room {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: String })
   options: RoomTypes.RoomOptions;
 
   @Prop({ required: true })
