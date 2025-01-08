@@ -4,10 +4,13 @@ import { useState, useEffect } from "react";
 import MainButton from "@/components/mainButton";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { socket } from "@/services/socket.io";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const router = useRouter();
+
+  socket.emit("room:test");
 
   useEffect(() => {
     const timer = setTimeout(() => {

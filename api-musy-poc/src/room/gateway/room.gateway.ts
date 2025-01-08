@@ -12,7 +12,9 @@ import {
 import { Server, Socket } from 'socket.io';
 import { RoomService } from '../room.service';
 
-@WebSocketGateway()
+@WebSocketGateway(1337, {
+  cors: '*',
+})
 export class RoomGateway implements OnGatewayDisconnect, OnGatewayConnection {
   @WebSocketServer() server: Server;
 
@@ -27,6 +29,14 @@ export class RoomGateway implements OnGatewayDisconnect, OnGatewayConnection {
   handleDisconnect(client: any) {
     console.log(`User Disconnected: ${client.id}`);
     // this.roomService.unsubscribeSocket(socket);
+  }
+
+  @SubscribeMessage('room:test')
+  async subscribe(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() roomId: string,
+  ) {
+    console.log('Test réussi');
   }
 
   // @SubscribeMessage('room:subscribe')
