@@ -11,6 +11,17 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --blue50: #edf0ff;
+    --blue100: #dee4ff;
+    --blue200: #c4ccff;
+    --blue300: #a0abff;
+    --blue400: #7a7dff;
+    --blue500: #615afa;
+    --blue600: #523cef;
+    --blue700: #432ccf;
+    --blue800: #3929aa;
+    --blue900: #322986;
+    --blue950: #1f184e;
   }
 }
 
