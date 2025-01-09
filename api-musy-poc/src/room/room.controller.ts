@@ -10,10 +10,11 @@ export class RoomController {
     return await this._roomService.create(data);
   }
 
-  // @Post("join")
-  // async join(@Body("roomId") id: string) {
-  //   return this._roomService.join(id);
-  // }
+  @Post("join")
+  async join(@Body("roomId") id: string) {
+    // creer une room en bdd
+    // res success -> room ID
+  }
 
   // @Delete("leave/:id")
   // async leave(@Param("id") id: string) {

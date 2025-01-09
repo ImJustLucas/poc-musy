@@ -2,7 +2,7 @@ import { socket } from "..";
 
 const createRoom = (partyName: string) => socket.emit("room:create", partyName);
 
-const subscribeRoom = (payload: { partyId: string; pseudo: string }) =>
+const subscribeRoom = (payload: { roomId: string; pseudo: string }) =>
   socket.emit("room:subscribe", payload);
 
 const leaveRoom = (partyId: string) => socket.emit("room:leave", partyId);
