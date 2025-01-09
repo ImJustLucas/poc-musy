@@ -2,12 +2,10 @@
 
 import MainButton from "@/components/mainButton";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const users = ["Paul", "Jean", "Marie", "Lucie", "Sophie", "Pierre", "Jacques"];
 
 export default function Home() {
-  const router = useRouter();
   return (
     <div className="bg-blue700 w-full h-full flex justify-center px-4">
       <div className="w-full max-w-md h-screen flex flex-col items-center relative text-center">

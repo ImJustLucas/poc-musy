@@ -23,7 +23,7 @@ export class RoomGateway
     @Inject(forwardRef(() => RoomService)) private roomService: RoomService,
   ) {}
 
-  private logger: Logger = new Logger("MyGateway");
+  private logger: Logger = new Logger("RoomGateway");
 
   afterInit(server: Server) {
     this.logger.log("WebSocket Server Initialized");
