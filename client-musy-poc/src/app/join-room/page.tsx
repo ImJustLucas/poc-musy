@@ -1,0 +1,29 @@
+import RoomCard from "@/components/roomCard";
+import { Room as RoomType } from "@/shared/types/room";
+
+type APIResponse<K> = {
+  success: boolean;
+  data: K;
+};
+
+export default async function JoinRoom() {
+  const data = await fetch("http://localhost:1337/room");
+  const response = (await data.json()) as APIResponse<RoomType[]>;
+  console.log(response.success);
+  console.log(response.data);
+  // const [roomCode, setRoomCode] = useState("");
+
+  return (
+    <div className="bg-blue700 w-full h-full flex justify-center px-4">
+      <div className="w-full max-w-md h-screen flex flex-col items-center justify-center relative text-center">
+        <h1 className="text-white text-3xl font-semibold my-8">
+          Liste des salles
+        </h1>
+
+        {response.data.map((room, index) => (
+          <RoomCard key={index} room={room} />
+        ))}
+      </div>
+    </div>
+  );
+}

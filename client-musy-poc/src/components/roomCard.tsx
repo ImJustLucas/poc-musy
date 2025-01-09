@@ -1,8 +1,39 @@
-import React from "react";
+"use client";
 
-const RoomCard: React.FC = () => {
+import { Room as RoomType } from "@/shared/types/room";
+import React from "react";
+import { roomService } from "@/services/fetcher/room";
+import { authRoomEvents } from "@/services/socket.io/room/authentication.events";
+import { useRouter } from "next/navigation";
+import { useUser } from "@/context/user.context";
+
+type RoomCard = {
+  room: RoomType;
+};
+
+const RoomCard: React.FC<RoomCard> = ({ room }) => {
+  const router = useRouter();
+  const { pseudo, socketId } = useUser();
+
+  const handleOnClick = async (roomId: string) => {
+    const { success, data } = await roomService.joinRoom(roomId, {
+      pseudo,
+      clientSocketId: socketId,
+    });
+
+    if (success) {
+      authRoomEvents.join({
+        roomId: data.roomSocketId,
+        pseudo: pseudo,
+      });
+      router.push(`room/${room.roomSocketId}`);
+    }
+  };
   return (
-    <div className="w-full flex justify-between gap-2 rounded-lg py-4 px-6 bg-blue500 duration-200 hover:bg-blue400">
+    <div
+      className="w-full flex justify-between gap-2 rounded-lg py-4 px-6 bg-blue500 duration-200 hover:bg-blue400 hover:cursor-pointer"
+      onClick={() => handleOnClick(room.roomSocketId)}
+    >
       <div className="flex gap-2 items-center">
         <svg
           width="16"
@@ -16,7 +47,9 @@ const RoomCard: React.FC = () => {
             fill="white"
           />
         </svg>
-        <div>15</div>
+        <div>
+          {Object.values(room.members ?? {}).length}・{room.name}
+        </div>
       </div>
       <svg
         width="24"
@@ -28,9 +61,9 @@ const RoomCard: React.FC = () => {
         <path
           d="M19 12L5 12M19 12L13 18M19 12L13 6"
           stroke="white"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </div>

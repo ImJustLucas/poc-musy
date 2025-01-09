@@ -6,11 +6,12 @@ import Image from "next/image";
 import { socket } from "@/services/socket.io";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useUser } from "@/context/user.context";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  const [pseudo, setPseudo] = useState("");
+  const { pseudo, setPseudo } = useUser();
   const router = useRouter();
   socket.emit("room:test");
 
@@ -75,7 +76,7 @@ export default function Home() {
             value={pseudo}
             onChange={(e) => setPseudo(e.target.value)}
           />
-          <Link href="/joinRoom" className="w-full flex flex-col">
+          <Link href="/join-room" className="w-full flex flex-col">
             <MainButton text="Rejoindre une salle" disabled={!pseudo} />
           </Link>
           <MainButton
