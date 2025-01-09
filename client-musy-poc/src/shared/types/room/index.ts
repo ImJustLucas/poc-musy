@@ -9,6 +9,10 @@ export interface Room {
 
 export enum RoomState {
   OPENED = "opened",
+  WAITING_PLAYERS = "waiting-players",
+  STARTING = "starting",
+  IN_GAME = "in-game",
+  RESULTS = "results",
   CLOSED = "closed",
 }
 

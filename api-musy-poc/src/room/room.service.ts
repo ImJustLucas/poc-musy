@@ -27,7 +27,7 @@ export class RoomService {
     const newRoom = new this.roomModel({
       name: room.name,
       options: room.options,
-      state: room.state,
+      state: room.state || "waiting-players",
       members: this.Members,
     });
 

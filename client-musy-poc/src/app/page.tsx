@@ -37,7 +37,7 @@ export default function Home() {
               maxQuestions: 5,
               timeToAnswer: 10000,
             },
-            state: "opened",
+            state: "waiting-players",
             members: {},
           }),
         });
