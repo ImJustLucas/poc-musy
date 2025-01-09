@@ -6,7 +6,6 @@ export type RoomDocument = HydratedDocument<Room>;
 
 @Schema()
 export class Room implements RoomTypes.Room {
-  @Prop({ required: true })
   _id: string;
 
   @Prop({ required: true })
@@ -31,6 +30,25 @@ export class Room implements RoomTypes.Room {
 
   @Prop({ required: true, type: Object, default: {} })
   members: Record<RoomTypes.UserSocketId, string>;
+
+  @Prop({
+    type: Date,
+    default: Date.now,
+  })
+  updatedAt: Date;
+
+  @Prop({
+    type: Date,
+    default: Date.now,
+  })
+  createdAt: Date;
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+RoomSchema.pre("save", async function (next: any) {
+  this.createdAt = new Date();
+
+  next();
+});

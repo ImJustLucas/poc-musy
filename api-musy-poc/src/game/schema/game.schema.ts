@@ -21,6 +21,18 @@ export class Game implements GameType.Game {
 
   @Prop({ required: true, type: Object })
   answers: Record<string, GameType.Anwser>;
+
+  @Prop({
+    type: Date,
+    default: Date.now,
+  })
+  updatedAt: Date;
+
+  @Prop({
+    type: Date,
+    default: Date.now,
+  })
+  createdAt: Date;
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);
