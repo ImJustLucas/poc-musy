@@ -35,7 +35,7 @@ export class RoomGateway
 
   handleDisconnect(client: any) {
     this.logger.log(`User Disconnected: ${client.id}`);
-    // this.roomService.unsubscribeSocket(socket);
+    this.roomService.unsubscribeSocket(client);
   }
 
   @SubscribeMessage("room:test")
@@ -46,11 +46,17 @@ export class RoomGateway
   @SubscribeMessage("room:subscribe")
   async subscribe(
     @ConnectedSocket() client: Socket,
-    @MessageBody() roomId: string,
+    @MessageBody()
+    data: {
+      roomId: string;
+      pseudo: string;
+    },
   ) {
+    if (!data.roomId) return;
+
     return this.roomService.subscribeSocket(
       client,
-      await this.roomService.validateRoom(roomId),
+      await this.roomService.validateRoom(data.roomId),
     );
   }
 }

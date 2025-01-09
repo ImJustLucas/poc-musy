@@ -15,6 +15,8 @@ const RoomCard: React.FC<RoomCard> = ({ room }) => {
   const router = useRouter();
   const { pseudo, socketId } = useUser();
 
+  console.log("socketId", socketId);
+
   const handleOnClick = async (roomId: string) => {
     const { success, data } = await roomService.joinRoom(roomId, {
       pseudo,

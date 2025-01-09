@@ -9,9 +9,10 @@ export default async function Room({
 }) {
   const roomSocketId = (await params).roomSocketId;
   const { data, success } = await roomService.getRoom(roomSocketId);
-  console.log("cheeeef ??", { data, success });
 
   if (!success) return null;
+
+  console.log(Object.values(data.members));
 
   return (
     <div className="bg-blue700 w-full h-full flex justify-center px-4">

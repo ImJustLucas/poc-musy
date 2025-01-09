@@ -3,7 +3,6 @@
 import Input from "@/components/input";
 import MainButton from "@/components/mainButton";
 import Image from "next/image";
-import { socket } from "@/services/socket.io";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/user.context";
@@ -11,8 +10,6 @@ import { useUser } from "@/context/user.context";
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const { pseudo, setPseudo } = useUser();
-
-  socket.emit("room:test");
 
   useEffect(() => {
     const timer = setTimeout(() => {

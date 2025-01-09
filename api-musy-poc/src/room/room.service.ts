@@ -1,5 +1,9 @@
 import { InjectModel } from "@nestjs/mongoose";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { Room } from "./schema/room.schema";
 import { Model } from "mongoose";
 import { Socket } from "socket.io";
@@ -23,12 +27,12 @@ export class RoomService {
     return this.roomModel.findById(roomId);
   }
 
-  getRoomBySocketId(roomSocketId: string) {
-    return this.roomModel.findOne({ roomSocketId });
+  async getRoomBySocketId(roomSocketId: string) {
+    return await this.roomModel.findOne({ roomSocketId });
   }
 
-  async validateRoom(roomId: string) {
-    const room = await this.getRoom(roomId);
+  async validateRoom(roomSocketId: string) {
+    const room = await this.getRoomBySocketId(roomSocketId);
 
     if (!room) {
       throw new NotFoundException("Room not found");
@@ -46,20 +50,63 @@ export class RoomService {
 
     if (
       !Object.entries(room.members).some(
-        ([socketId, pseudo]) => user.clientSocketId === socketId,
+        ([socketId]) => user.clientSocketId === socketId,
       )
     ) {
-      room.members[user.clientSocketId] = user.pseudo;
-      console.log(`Add ${user.pseudo} to room : ${room._id}`);
-      return room.save();
+      try {
+        const updatedRoom = await this.roomModel.findByIdAndUpdate(
+          room._id,
+          {
+            $set: {
+              [`members.${user.clientSocketId}`]: user.pseudo,
+            },
+          },
+          { new: true },
+        );
+
+        if (!updatedRoom) {
+          throw new Error("Failed to update room");
+        }
+
+        console.log(`Added ${user.pseudo} to room: ${room._id}`);
+        return updatedRoom;
+      } catch (error) {
+        console.error("Error joining room:", error);
+        throw error;
+      }
     }
 
     return room;
   }
 
-  // async unsubscribeSocket(socket: Socket, user: User) {
-  //   await this.socketConnectionService.delete(socket);
+  async removeUserFromRooms(socketId: string) {
+    try {
+      const rooms = await this.roomModel.find({
+        [`members.${socketId}`]: { $exists: true },
+      });
 
-  //   return socket.leave(`user_${user._id}`);
-  // }
+      const updatePromises = rooms.map((room) =>
+        this.roomModel.findByIdAndUpdate(
+          room._id,
+          {
+            $unset: { [`members.${socketId}`]: 1 },
+          },
+          { new: true },
+        ),
+      );
+
+      const updatedRooms = await Promise.all(updatePromises);
+
+      return updatedRooms;
+    } catch (error) {
+      console.error("Error removing user from rooms:", error);
+      throw error;
+    }
+  }
+
+  async unsubscribeSocket(socket: Socket) {
+    await this.removeUserFromRooms(socket.id);
+
+    return;
+  }
 }
