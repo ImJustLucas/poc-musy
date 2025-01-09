@@ -12,7 +12,15 @@ export class Room implements RoomTypes.Room {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, type: String })
+  @Prop({
+    required: true,
+    type: Object,
+    default: {
+      maxPlayers: 10,
+      maxQuestions: 5,
+      timeToAnswer: 10000,
+    },
+  })
   options: RoomTypes.RoomOptions;
 
   @Prop({ required: true })
@@ -21,7 +29,7 @@ export class Room implements RoomTypes.Room {
   @Prop({ required: true })
   roomSocketId: string;
 
-  @Prop({ required: true, type: Object })
+  @Prop({ required: true, type: Object, default: {} })
   members: Record<RoomTypes.UserSocketId, string>;
 }
 
