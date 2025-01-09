@@ -7,7 +7,9 @@ import { RoomTypes } from "@/shared/shared-types";
 
 @Injectable()
 export class RoomService {
-  constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {}
+  constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {
+    this.Members = {};
+  }
 
   private Members: Record<string, string>;
 
@@ -16,7 +18,12 @@ export class RoomService {
   }
 
   async create(room: RoomTypes.CreateRoom) {
-    const newRoom = new this.roomModel(room);
+    const newRoom = new this.roomModel({
+      name: room.name,
+      options: room.options,
+      state: room.state,
+      members: this.Members,
+    });
 
     return await newRoom.save();
   }

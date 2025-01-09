@@ -46,7 +46,7 @@ export default function Home() {
 
         // Vous pouvez maintenant décommenter et utiliser la redirection
         if (data.data._id) {
-          router.push(`/room/${data.data._id}`);
+          router.push(`/room/${data.data.roomSocketId}`);
         }
       } catch (error) {
         console.error("Error creating room:", error);

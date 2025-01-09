@@ -50,6 +50,7 @@ export const RoomSchema = SchemaFactory.createForClass(Room);
 RoomSchema.pre("save", async function (next: any) {
   this.createdAt = new Date();
   this.roomSocketId = `room_${this._id}`;
+  // this.members = {};
 
   next();
 });
