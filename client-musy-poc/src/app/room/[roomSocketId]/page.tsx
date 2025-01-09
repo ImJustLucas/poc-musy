@@ -12,6 +12,7 @@ export default async function Room({
   const { data, success } = await roomService.getRoom(roomSocketId);
 
   socket.on("room:user-join", (payload) => {
+    console.log("truc reçu");
     data.members[payload.newUser] = payload.newUser;
   });
 

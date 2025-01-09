@@ -44,6 +44,7 @@ export class RoomService {
   }
 
   subscribeSocket(data: { client: Socket; pseudo: string }, room: Room) {
+    console.log("Send truc to client");
     data.client.broadcast.emit("room:user-join", {
       newUser: data.pseudo,
     });
