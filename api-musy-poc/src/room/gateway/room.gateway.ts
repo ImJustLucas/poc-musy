@@ -55,7 +55,7 @@ export class RoomGateway
     if (!data.roomId) return;
 
     return this.roomService.subscribeSocket(
-      client,
+      { client, pseudo: data.pseudo },
       await this.roomService.validateRoom(data.roomId),
     );
   }
