@@ -17,7 +17,7 @@ function sortUsersByScore(users: { pseudo: string; score: number }[]) {
   return users.sort((a, b) => b.score - a.score);
 }
 
-export default function FinalScore() {
+const FinalScore = () => {
   const sortedUsers = sortUsersByScore(users);
 
   return (
@@ -136,4 +136,6 @@ export default function FinalScore() {
       </div>
     </div>
   );
-}
+};
+
+export default FinalScore;

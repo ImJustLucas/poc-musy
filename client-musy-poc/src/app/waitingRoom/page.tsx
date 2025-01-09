@@ -34,7 +34,7 @@ export default function Home() {
           ))}
         </div>
         <div className=" w-full flex justify-center absolute bottom-8">
-          <Link href="/games/qcm" className="w-full max-w-60">
+          <Link href="/game" className="w-full max-w-60">
             <MainButton text="Suivant" className="w-full" />
           </Link>
         </div>

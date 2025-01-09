@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { questions } from "./questions"; // Import questions from the new file
 import ScoreScreen from "@/components/scoreScreen";
 import { useRouter } from "next/navigation"; // Import useRouter from next/router
+import QCM from "@/components/QCM"; // Import the new QCMComponent
+import StartCountDown from "@/components/StartCountDown"; // Import the new StartCountDown component
+import FinalScore from "@/components/FinalScore";
 
 const shuffleArray = (array: any[]) => {
   return array.sort(() => Math.random() - 0.5);
@@ -46,7 +49,7 @@ const initialUsers = [
   },
 ];
 
-export default function QCM() {
+export default function game() {
   const router = useRouter(); // Initialize useRouter
   const [timeLeft, setTimeLeft] = useState(QUESTION_DURATION);
   const [askedQuestions, setAskedQuestions] = useState<Set<number>>(new Set());
@@ -60,7 +63,8 @@ export default function QCM() {
   const [score, setScore] = useState(0);
   const [startCountdown, setStartCountdown] = useState(3);
   const [gameStarted, setGameStarted] = useState(false);
-  const [showScoreScreen, setShowScoreScreen] = useState(false);
+  const [displayedComponent, setDisplayedComponent] =
+    useState<string>("countdown");
   const [users, setUsers] = useState(initialUsers);
 
   useEffect(() => {
@@ -71,6 +75,7 @@ export default function QCM() {
       return () => clearTimeout(timer);
     } else {
       setGameStarted(true);
+      setDisplayedComponent("qcm");
     }
   }, [startCountdown]);
 
@@ -81,8 +86,8 @@ export default function QCM() {
           if (prev > 0) {
             return prev - 100; // Decrease by 100 milliseconds
           } else {
-            if (questionNumber <= 10) {
-              setShowScoreScreen(true);
+            if (questionNumber <= 3) {
+              setDisplayedComponent("scoreScreen");
               setUsers((prevUsers) => {
                 const updatedUsers = prevUsers.map((user) => ({
                   ...user,
@@ -111,7 +116,7 @@ export default function QCM() {
               });
 
               const scoreScreenTimer = setTimeout(() => {
-                setShowScoreScreen(false);
+                setDisplayedComponent("qcm");
                 const question = getRandomQuestion(askedQuestions);
                 setAskedQuestions((prev) => new Set(prev).add(question.id));
                 setCurrentQuestion(question);
@@ -131,7 +136,7 @@ export default function QCM() {
               clearInterval(timer);
               return 0;
             } else {
-              router.push("/games/final-score");
+              setDisplayedComponent("finalScore");
             }
             return 0;
           }
@@ -156,76 +161,21 @@ export default function QCM() {
   return (
     <div className="bg-blue950 w-full flex justify-center px-4 overflow-hidden">
       <div className="w-full max-w-md min-h-screen flex flex-col items-center relative text-center">
-        {startCountdown > 0 ? (
-          <div
-            key={startCountdown}
-            className="h-screen flex items-center justify-centertext-white text-6xl animate-scale-down"
-          >
-            {startCountdown}
-          </div>
-        ) : showScoreScreen ? (
+        {displayedComponent === "countdown" ? (
+          <StartCountDown startCountdown={startCountdown} />
+        ) : displayedComponent === "scoreScreen" ? (
           <ScoreScreen users={users} />
+        ) : displayedComponent === "finalScore" ? (
+          <FinalScore />
         ) : (
-          <div className="w-full h-screen flex flex-col items-center justify-between">
-            <div className="w-full mt-8">
-              {/* Barre de progression */}
-              <div className="w-full h-1 bg-gray-300 mb-4 overflow-hidden">
-                <div
-                  className="progress-bar bg-blue-500 h-full"
-                  style={{
-                    animation: `progress-linear ${QUESTION_DURATION}ms linear forwards`,
-                  }}
-                ></div>
-              </div>
-              <div className="text-xl mt-16">Question {questionNumber}/10</div>
-            </div>
-            <div className="text-2xl text-center">
-              {currentQuestion.question}
-            </div>
-            <div className="w-full grid grid-cols-2 gap-2 mb-8">
-              {currentQuestion.answers.map((answer) => (
-                <MainButton
-                  key={answer}
-                  text={answer}
-                  onClick={() => handleAnswerClick(answer)}
-                  type={
-                    selectedAnswer
-                      ? answer === currentQuestion.correctAnswer
-                        ? "correct"
-                        : answer === selectedAnswer
-                        ? "wrong"
-                        : undefined
-                      : undefined
-                  }
-                />
-              ))}
-            </div>
-          </div>
+          <QCM
+            questionNumber={questionNumber}
+            currentQuestion={currentQuestion}
+            selectedAnswer={selectedAnswer}
+            handleAnswerClick={handleAnswerClick}
+          />
         )}
       </div>
-      <style>
-        {`
-          @keyframes progress-linear {
-            from {
-              width: 100%;
-            }
-            to {
-              width: 0%;
-            }
-          }
-          @keyframes scale-down {
-            0% {
-              transform: scale(100);
-            }
-            100% {
-              transform: scale(1);
-            }
-          }
-          .animate-scale-down {
-            animation: scale-down 0.5s ease-in-out;
-          }
-        `}
-      </style>
     </div>
   );
 }
