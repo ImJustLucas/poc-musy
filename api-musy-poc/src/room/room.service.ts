@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Room } from "./schema/room.schema";
 import { Model } from "mongoose";
 import { Socket } from "socket.io";
+import { RoomTypes } from "@/shared/shared-types";
 
 @Injectable()
 export class RoomService {
@@ -12,9 +13,10 @@ export class RoomService {
   //   return this.roomModel.find().exec();
   // }
 
-  async create(room: any) {
-    const object = await this.roomModel.create(room);
-    return object;
+  async create(room: RoomTypes.CreateRoom) {
+    const newRoom = new this.roomModel(room);
+
+    return await newRoom.save();
   }
 
   getRoom(roomId: string) {

@@ -1,13 +1,19 @@
 import { Body, Controller, Delete, Param, Post } from "@nestjs/common";
 import { RoomService } from "./room.service";
+import { RoomTypes } from "@/shared/shared-types";
 
 @Controller("room")
 export class RoomController {
   constructor(private _roomService: RoomService) {}
 
-  @Post()
-  async createRoom(@Body() data: any) {
-    return await this._roomService.create(data);
+  @Post("create")
+  async createRoom(@Body() data: RoomTypes.CreateRoom) {
+    const res = await this._roomService.create(data);
+
+    return {
+      sucess: true,
+      data: res,
+    };
   }
 
   @Post("join")

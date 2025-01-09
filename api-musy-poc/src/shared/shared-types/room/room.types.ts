@@ -8,6 +8,14 @@ export interface Room {
   members: Record<UserSocketId, string>;
 }
 
+export interface CreateRoom {
+  name: string;
+  options: RoomOptions;
+  state: RoomState;
+  roomSocketId: string;
+  members: Record<UserSocketId, string>;
+}
+
 export enum RoomState {
   OPENED = "opened",
   CLOSED = "closed",

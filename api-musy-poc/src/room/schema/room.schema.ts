@@ -25,7 +25,7 @@ export class Room implements RoomTypes.Room {
   @Prop({ required: true })
   state: RoomTypes.RoomState;
 
-  @Prop({ required: true })
+  @Prop()
   roomSocketId: string;
 
   @Prop({ required: true, type: Object, default: {} })
@@ -49,6 +49,7 @@ export const RoomSchema = SchemaFactory.createForClass(Room);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 RoomSchema.pre("save", async function (next: any) {
   this.createdAt = new Date();
+  this.roomSocketId = `room_${this._id}`;
 
   next();
 });

@@ -6,13 +6,13 @@ import Image from "next/image";
 import { socket } from "@/services/socket.io";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [pseudo, setPseudo] = useState("");
-
+  const router = useRouter();
   socket.emit("room:test");
-  console.log("wsh");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,16 +23,32 @@ export default function Home() {
 
   const handleCreateRoom = async () => {
     if (pseudo) {
-      const res = await fetch("http:localhost:1337/room", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ pseudo }),
-      });
-      const { roomId } = await res.json();
-      if (roomId) {
-        window.location.href = `/room/${roomId}`;
+      try {
+        const response = await fetch("http://localhost:1337/room/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: `${pseudo}'s room`,
+            options: {
+              maxPlayers: 10,
+              maxQuestions: 5,
+              timeToAnswer: 10000,
+            },
+            state: "opened",
+            members: {},
+          }),
+        });
+
+        const data = await response.json();
+
+        // Vous pouvez maintenant décommenter et utiliser la redirection
+        if (data.data._id) {
+          router.push(`/room/${data.data._id}`);
+        }
+      } catch (error) {
+        console.error("Error creating room:", error);
       }
     }
   };
