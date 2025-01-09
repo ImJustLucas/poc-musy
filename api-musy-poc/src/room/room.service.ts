@@ -12,23 +12,28 @@ export class RoomService {
   //   return this.roomModel.find().exec();
   // }
 
-  // getRoom(roomId: string) {
-  //   return this.roomModel.findById(roomId);
-  // }
+  async create(room: any) {
+    const object = await this.roomModel.create(room);
+    return object;
+  }
 
-  // async validateRoom(roomId: string) {
-  //   const room = await this.getRoom(roomId);
+  getRoom(roomId: string) {
+    return this.roomModel.findById(roomId);
+  }
 
-  //   if (!room) {
-  //     throw new NotFoundException('Room not found');
-  //   }
+  async validateRoom(roomId: string) {
+    const room = await this.getRoom(roomId);
 
-  //   return room;
-  // }
+    if (!room) {
+      throw new NotFoundException("Room not found");
+    }
 
-  // subscribeSocket(socket: Socket, room: Room) {
-  //   return socket.join(`room_${room._id}`);
-  // }
+    return room;
+  }
+
+  subscribeSocket(socket: Socket, room: Room) {
+    return socket.join(`room_${room._id}`);
+  }
 
   // async unsubscribeSocket(socket: Socket, user: User) {
   //   await this.socketConnectionService.delete(socket);

@@ -12,6 +12,7 @@ export default function Home() {
   const [pseudo, setPseudo] = useState("");
 
   socket.emit("room:test");
+  console.log("wsh");
 
   useEffect(() => {
     const timer = setTimeout(() => {

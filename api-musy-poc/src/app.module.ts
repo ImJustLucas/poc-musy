@@ -22,7 +22,6 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
-      // imports: [ConfigModule],
       useClass: MongoDBConfigService,
       inject: [ConfigService],
     }),

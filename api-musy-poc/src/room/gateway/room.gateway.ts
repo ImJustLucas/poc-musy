@@ -1,4 +1,4 @@
-import { forwardRef, Inject } from '@nestjs/common';
+import { forwardRef, Inject, Logger } from "@nestjs/common";
 import {
   WebSocketGateway,
   OnGatewayDisconnect,
@@ -7,46 +7,50 @@ import {
   WebSocketServer,
   ConnectedSocket,
   MessageBody,
-} from '@nestjs/websockets';
+  OnGatewayInit,
+} from "@nestjs/websockets";
 
-import { Server, Socket } from 'socket.io';
-import { RoomService } from '../room.service';
+import { Server, Socket } from "socket.io";
+import { RoomService } from "../room.service";
 
-@WebSocketGateway(1337, {
-  cors: '*',
-})
-export class RoomGateway implements OnGatewayDisconnect, OnGatewayConnection {
+@WebSocketGateway()
+export class RoomGateway
+  implements OnGatewayDisconnect, OnGatewayConnection, OnGatewayInit
+{
   @WebSocketServer() server: Server;
 
   constructor(
     @Inject(forwardRef(() => RoomService)) private roomService: RoomService,
   ) {}
 
+  private logger: Logger = new Logger("MyGateway");
+
+  afterInit(server: Server) {
+    this.logger.log("WebSocket Server Initialized");
+  }
+
   handleConnection(client: any, ...args: any[]) {
-    console.log(`New user connected: ${client.id}`);
+    this.logger.log(`New user connected: ${client.id}`);
   }
 
   handleDisconnect(client: any) {
-    console.log(`User Disconnected: ${client.id}`);
+    this.logger.log(`User Disconnected: ${client.id}`);
     // this.roomService.unsubscribeSocket(socket);
   }
 
-  @SubscribeMessage('room:test')
+  @SubscribeMessage("room:test")
+  async test(@ConnectedSocket() client: Socket, @MessageBody() roomId: string) {
+    this.logger.log("Test réussi");
+  }
+
+  @SubscribeMessage("room:subscribe")
   async subscribe(
     @ConnectedSocket() client: Socket,
     @MessageBody() roomId: string,
   ) {
-    console.log('Test réussi');
+    return this.roomService.subscribeSocket(
+      client,
+      await this.roomService.validateRoom(roomId),
+    );
   }
-
-  // @SubscribeMessage('room:subscribe')
-  // async subscribe(
-  //   @ConnectedSocket() client: Socket,
-  //   @MessageBody() roomId: string,
-  // ) {
-  //   return this.roomService.subscribeSocket(
-  //     client,
-  //     await this.roomService.validateRoom(roomId),
-  //   );
-  // }
 }

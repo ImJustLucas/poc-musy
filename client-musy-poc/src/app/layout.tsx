@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${figtree.className}`}>{children}</body>
+      <body className={`${figtree.className} dark`}>{children}</body>
     </html>
   );
 }
