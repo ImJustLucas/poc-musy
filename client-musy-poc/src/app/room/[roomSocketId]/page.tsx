@@ -1,5 +1,6 @@
 import MainButton from "@/components/mainButton";
 import { roomService } from "@/services/fetcher/room";
+import { socket } from "@/services/socket.io";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -11,6 +12,10 @@ export default async function Room({
   const roomSocketId = (await params).roomSocketId;
   const { data, success } = await roomService.getRoom(roomSocketId);
   console.log("Data", { data, success });
+
+  socket.on("room:user-join", (payload) => {
+    data.members[payload.newUser] = payload.newUser;
+  });
 
   if (!success) return null;
 

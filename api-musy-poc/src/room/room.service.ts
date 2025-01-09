@@ -6,7 +6,8 @@ import {
 } from "@nestjs/common";
 import { Room } from "./schema/room.schema";
 import { Model } from "mongoose";
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
+import { WebSocketServer } from "@nestjs/websockets";
 import { RoomTypes } from "@/shared/shared-types";
 
 @Injectable()
@@ -14,6 +15,7 @@ export class RoomService {
   constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {
     this.Members = {};
   }
+  @WebSocketServer() server: Server;
 
   private Members: Record<string, string>;
 
@@ -50,8 +52,11 @@ export class RoomService {
     return room;
   }
 
-  subscribeSocket(socket: Socket, room: Room) {
-    return socket.join(`room_${room._id}`);
+  subscribeSocket(data: { client: Socket; pseudo: string }, room: Room) {
+    data.client.broadcast.emit("room:user-join", {
+      newUser: data.pseudo,
+    });
+    return data.client.join(`room_${room._id}`);
   }
 
   async join(roomId: string, user: { pseudo: string; clientSocketId: string }) {
