@@ -3,17 +3,17 @@
 import Input from "@/components/input";
 import MainButton from "@/components/mainButton";
 import Image from "next/image";
-import { socket } from "@/services/socket.io";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/user.context";
 import { useRouter } from "next/navigation";
+import { roomService } from "@/services/fetcher/room";
+import { authRoomEvents } from "@/services/socket.io/room/authentication.events";
 
 export default function Home() {
   const [loaded, setLoaded] = useState(false);
-  const { pseudo, setPseudo } = useUser();
+  const { pseudo, setPseudo, socketId } = useUser();
   const router = useRouter();
-  socket.emit("room:test");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -42,11 +42,23 @@ export default function Home() {
           }),
         });
 
-        const data = await response.json();
+        const resData = await response.json();
 
         // Vous pouvez maintenant décommenter et utiliser la redirection
-        if (data.data._id) {
-          router.push(`/room/${data.data.roomSocketId}`);
+        const { success, data } = await roomService.joinRoom(
+          resData.data.roomSocketId,
+          {
+            pseudo,
+            clientSocketId: socketId,
+          },
+        );
+
+        if (success) {
+          authRoomEvents.join({
+            roomId: data.roomSocketId,
+            pseudo: pseudo,
+          });
+          router.push(`room/${resData.data.roomSocketId}`);
         }
       } catch (error) {
         console.error("Error creating room:", error);

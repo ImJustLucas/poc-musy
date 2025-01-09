@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -28,6 +29,8 @@ export class RoomController {
   async getRoomBySocketName(@Param("roomSocketId") roomSocketId: string) {
     const room = await this._roomService.getRoomBySocketId(roomSocketId);
 
+    console.log("ROOM", room);
+
     return {
       success: true,
       data: room,
@@ -49,17 +52,21 @@ export class RoomController {
     @Param("roomSocketId") roomSocketId: string,
     @Body() user: { pseudo: string; clientSocketId: string },
   ) {
+    console.log("user", user);
+    if (!roomSocketId)
+      return new BadRequestException("roomSocketId is missing");
+
     const room = await this._roomService.getRoomBySocketId(roomSocketId);
 
     if (!room) {
       throw new NotFoundException("Room not found");
     }
 
-    this._roomService.join(room._id, user);
+    const joinedRoom = await this._roomService.join(room.roomSocketId, user);
 
     return {
       success: true,
-      data: room,
+      data: joinedRoom,
     };
   }
 

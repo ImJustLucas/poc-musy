@@ -27,7 +27,6 @@ export class BaseFetcher {
 
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      console.log(response);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     return response.json();
