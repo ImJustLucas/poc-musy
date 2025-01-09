@@ -5,6 +5,7 @@ export interface Room {
   options: RoomOptions;
   state: RoomState;
   roomSocketId: string;
+  members: Record<UserSocketId, string>;
 }
 
 export enum RoomState {
@@ -13,10 +14,10 @@ export enum RoomState {
 }
 
 export interface RoomOptions {
-  maxPlaysers: number;
+  maxPlayers: number;
   maxQuestions: number;
   timeToAnswer: number;
 }
 
 type QuestionId = string;
-type UserSocketId = string;
+export type UserSocketId = string;

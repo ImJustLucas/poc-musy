@@ -20,6 +20,9 @@ export class Room implements RoomTypes.Room {
 
   @Prop({ required: true })
   roomSocketId: string;
+
+  @Prop({ required: true, type: Object })
+  members: Record<RoomTypes.UserSocketId, string>;
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);
