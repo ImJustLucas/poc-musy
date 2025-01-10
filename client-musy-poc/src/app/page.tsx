@@ -22,6 +22,8 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  console.log(process.env.NEXT_PUBLIC_SOCKET_URL);
+
   const handleCreateRoom = async () => {
     if (pseudo) {
       try {
@@ -52,7 +54,7 @@ export default function Home() {
           {
             pseudo,
             clientSocketId: socketId,
-          }
+          },
         );
 
         if (success) {
