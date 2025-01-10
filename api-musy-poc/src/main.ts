@@ -25,6 +25,6 @@ async function bootstrap() {
       .get<string>("CORS_ALLOWED_HEADERS", "")
       .split(", "),
   });
-  await app.listen(process.env.PORT || 1337);
+  await app.listen(process.env.PORT || 1337, "0.0.0.0");
 }
 bootstrap();
