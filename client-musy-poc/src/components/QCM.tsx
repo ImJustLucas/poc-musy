@@ -4,6 +4,7 @@ const QUESTION_DURATION = 7000;
 
 interface QCMComponentProps {
   questionNumber: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   currentQuestion: any;
   selectedAnswer: string | null;
   handleAnswerClick: (answer: string) => void;

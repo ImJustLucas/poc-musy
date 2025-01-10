@@ -1,6 +1,6 @@
 "use client";
 
-import { socket, socket as socketInstance } from "@/services/socket.io";
+import { socket as socketInstance } from "@/services/socket.io";
 import { Room } from "@/shared/types/room";
 import React, {
   createContext,
