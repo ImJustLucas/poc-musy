@@ -1,5 +1,6 @@
 import RoomCard from "@/components/roomCard";
 import { Room as RoomType } from "@/shared/types/room";
+import { Suspense } from "react";
 
 type APIResponse<K> = {
   success: boolean;
@@ -8,7 +9,7 @@ type APIResponse<K> = {
 
 export default async function JoinRoom() {
   const baseURL = process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:1337";
-
+  console.log(baseURL);
   const data = await fetch(`${baseURL}/room`);
   const response = (await data.json()) as APIResponse<RoomType[]>;
 
@@ -19,9 +20,11 @@ export default async function JoinRoom() {
           Liste des salles
         </h1>
 
-        {response.data.map((room, index) => (
-          <RoomCard key={index} room={room} />
-        ))}
+        <Suspense>
+          {response.data.map((room, index) => (
+            <RoomCard key={index} room={room} />
+          ))}
+        </Suspense>
       </div>
     </div>
   );
