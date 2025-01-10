@@ -1,15 +1,13 @@
 "use client";
 
-import MainButton from "@/components/mainButton";
+import FinalScore from "@/components/FinalScore";
+import QCM from "@/components/QCM"; // Import the new QCMComponent
+import ScoreScreen from "@/components/scoreScreen";
+import StartCountDown from "@/components/StartCountDown"; // Import the new StartCountDown component
 import { useEffect, useState } from "react";
 import { questions } from "./questions"; // Import questions from the new file
-import ScoreScreen from "@/components/scoreScreen";
-import { useRouter } from "next/navigation"; // Import useRouter from next/router
-import QCM from "@/components/QCM"; // Import the new QCMComponent
-import StartCountDown from "@/components/StartCountDown"; // Import the new StartCountDown component
-import FinalScore from "@/components/FinalScore";
 
-const shuffleArray = (array: any[]) => {
+const shuffleArray = <T,>(array: T[]): T[] => {
   return array.sort(() => Math.random() - 0.5);
 };
 
@@ -26,7 +24,6 @@ const getRandomQuestion = (askedQuestions: Set<number>) => {
 
 const QUESTION_DURATION = 7000;
 const SCORE_SCREEN_DURATION = 5000;
-const SCORE_SCREEN_DELAY = 2000;
 
 const MY_PSEUDO = "ryry aka webflow goat";
 
@@ -49,8 +46,7 @@ const initialUsers = [
   },
 ];
 
-export default function game() {
-  const router = useRouter(); // Initialize useRouter
+export default function Game() {
   const [timeLeft, setTimeLeft] = useState(QUESTION_DURATION);
   const [askedQuestions, setAskedQuestions] = useState<Set<number>>(new Set());
   const [currentQuestion, setCurrentQuestion] = useState(() => {
@@ -115,13 +111,13 @@ export default function game() {
                 }));
               });
 
-              const scoreScreenTimer = setTimeout(() => {
+              setTimeout(() => {
                 setDisplayedComponent("qcm");
                 const question = getRandomQuestion(askedQuestions);
                 setAskedQuestions((prev) => new Set(prev).add(question.id));
                 setCurrentQuestion(question);
                 setSelectedAnswer(null);
-                setTimeLeft(QUESTION_DURATION); // Reset to 10 seconds in milliseconds
+                setTimeLeft(QUESTION_DURATION); // Reset
                 setQuestionNumber((prev) => prev + 1);
                 const progressBar = document.querySelector(
                   ".progress-bar"
@@ -144,7 +140,15 @@ export default function game() {
       }, 100);
       return () => clearInterval(timer);
     }
-  }, [gameStarted, selectedAnswer]);
+  }, [
+    gameStarted,
+    selectedAnswer,
+    askedQuestions,
+    currentQuestion.correctAnswer,
+    questionNumber,
+    score,
+    timeLeft,
+  ]);
 
   useEffect(() => {
     if (selectedAnswer) {
@@ -152,7 +156,7 @@ export default function game() {
         setScore((prev) => prev + timeLeft); // Convert milliseconds to seconds
       }
     }
-  }, [selectedAnswer]);
+  }, [selectedAnswer, currentQuestion.correctAnswer, timeLeft]);
 
   const handleAnswerClick = (answer: string) => {
     setSelectedAnswer(answer);

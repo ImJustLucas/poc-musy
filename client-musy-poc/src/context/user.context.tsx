@@ -37,7 +37,7 @@ export function UserProvider({ children }: UserProviderProps) {
     if (socketId === "" && socketInstance.id) {
       setSocketId(socketInstance.id);
     }
-  }, [socketInstance.id]);
+  }, [socketInstance.id, socketId]);
 
   const value = {
     pseudo,
