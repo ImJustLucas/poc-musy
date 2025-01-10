@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import "./globals.css";
+import { UserProvider } from "@/context/user.context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${figtree.className}`}>{children}</body>
+      <body className={`${figtree.className} dark`}>
+        <UserProvider>{children}</UserProvider>
+      </body>
     </html>
   );
 }

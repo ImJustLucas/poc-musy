@@ -1,19 +1,38 @@
 "use client";
 
-import MainButton from "@/components/mainButton";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import MainButton from "../mainButton";
+import { Room } from "@/shared/types/room";
+import { useEffect, useState } from "react";
+import { socket } from "@/services/socket.io";
 
-const users = ["Paul", "Jean", "Marie", "Lucie", "Sophie", "Pierre", "Jacques"];
+type WaitingRoomProps = {
+  room: Room;
+  startGame: () => void;
+};
 
-export default function Home() {
-  const router = useRouter();
+export const WaitingRoomScreen: React.FC<WaitingRoomProps> = ({
+  room,
+  startGame,
+}) => {
+  const [members, setMembers] = useState(room.members);
+
+  useEffect(() => {
+    socket.on("room:user-join", (payload) => {
+      setMembers({
+        ...members,
+        [payload.newUser]: payload.newUser,
+      });
+    });
+  });
+
   return (
     <div className="bg-blue700 w-full h-full flex justify-center px-4">
       <div className="w-full max-w-md h-screen flex flex-col items-center relative text-center">
-        <div className="text-white text-6xl mt-20">U67GL</div>
+        <div className="text-white text-6xl mt-20">{room.name}</div>
         <div className="flex items-center gap-2 mb-6">
-          <div className="text-xl">{users.length}</div>
+          <div className="text-xl">
+            {Object.values(members).length} / {room.options.maxPlayers}
+          </div>
           <svg
             width="24"
             height="24"
@@ -29,16 +48,14 @@ export default function Home() {
         </div>
         <div className="text-xl mb-2">En attente de joueurs...</div>
         <div className="flex flex-col items-center">
-          {users.map((user) => (
+          {Object.values(members).map((user) => (
             <div key={user}>{user}</div>
           ))}
         </div>
         <div className=" w-full flex justify-center absolute bottom-8">
-          <Link href="/games/qcm" className="w-full max-w-60">
-            <MainButton text="Suivant" className="w-full" />
-          </Link>
+          <MainButton text="Suivant" className="w-full" onClick={startGame} />
         </div>
       </div>
     </div>
   );
-}
+};
