@@ -7,7 +7,9 @@ type APIResponse<K> = {
 };
 
 export default async function JoinRoom() {
-  const data = await fetch("http://localhost:1337/room");
+  const baseURL = process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:1337";
+
+  const data = await fetch(`${baseURL}/room`);
   const response = (await data.json()) as APIResponse<RoomType[]>;
 
   return (

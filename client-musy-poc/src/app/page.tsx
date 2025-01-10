@@ -25,7 +25,10 @@ export default function Home() {
   const handleCreateRoom = async () => {
     if (pseudo) {
       try {
-        const response = await fetch("http://localhost:1337/room/create", {
+        const baseURL =
+          process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:1337";
+
+        const response = await fetch(`${baseURL}/room/create`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
