@@ -19,9 +19,11 @@ export default async function JoinRoom() {
         </h1>
 
         <Suspense>
-          {response.data.map((room, index) => (
-            <RoomCard key={index} room={room} />
-          ))}
+          <div className="flex flex-col gap-2">
+            {response.data.map((room, index) => (
+              <RoomCard key={index} room={room} />
+            ))}
+          </div>
         </Suspense>
       </div>
     </div>
