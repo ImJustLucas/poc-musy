@@ -23,4 +23,4 @@ COPY package*.json ./
 
 EXPOSE 1337
 
-CMD ["node", "dist/main"]a
+CMD ["node", "dist/main"]
