@@ -2,7 +2,7 @@
 
 import FinalScore from "@/components/FinalScore";
 import QCM from "@/components/QCM"; // Import the new QCMComponent
-import ScoreScreen from "@/components/scoreScreen";
+import ScoreScreen from "@/components/ScoreScreen";
 import StartCountDown from "@/components/StartCountDown"; // Import the new StartCountDown component
 import { useEffect, useState } from "react";
 import { questions } from "./questions"; // Import questions from the new file
