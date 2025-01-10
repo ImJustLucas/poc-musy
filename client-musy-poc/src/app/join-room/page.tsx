@@ -3,7 +3,13 @@ import { roomService } from "@/services/fetcher/room";
 import { Suspense } from "react";
 
 export default async function JoinRoom() {
-  const response = await roomService.getRooms();
+  const response = await roomService
+    .getRooms()
+    .then((res) => res)
+    .catch((err) => {
+      console.log(err);
+      return { data: [] };
+    });
 
   return (
     <div className="bg-blue700 w-full h-full flex justify-center px-4">
