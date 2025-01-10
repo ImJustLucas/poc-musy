@@ -25,8 +25,9 @@ export default function Home() {
   const handleCreateRoom = async () => {
     if (pseudo) {
       try {
-        const baseURL =
-          process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:1337";
+        // const baseURL =
+        //   process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:1337";
+        const baseURL = "https://api-musy-poc-4f55.up.railway.app";
 
         const response = await fetch(`${baseURL}/room/create`, {
           method: "POST",
