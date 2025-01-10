@@ -2,7 +2,7 @@
 
 import FinalScore from "@/components/FinalScore";
 import QCM from "@/components/QCM"; // Import the new QCMComponent
-import ScoreScreen from "@/components/ScoreScreen";
+import ScoreScreen from "@/components/scoreScreen";
 import StartCountDown from "@/components/StartCountDown"; // Import the new StartCountDown component
 import { useEffect, useState } from "react";
 import { questions } from "./questions"; // Import questions from the new file
@@ -97,7 +97,7 @@ export default function Game() {
                 }));
 
                 const sortedUsers = [...updatedUsers].sort(
-                  (a, b) => b.score - a.score
+                  (a, b) => b.score - a.score,
                 );
 
                 return sortedUsers.map((user, index) => ({
@@ -120,7 +120,7 @@ export default function Game() {
                 setTimeLeft(QUESTION_DURATION); // Reset
                 setQuestionNumber((prev) => prev + 1);
                 const progressBar = document.querySelector(
-                  ".progress-bar"
+                  ".progress-bar",
                 ) as HTMLElement;
                 if (progressBar) {
                   progressBar.classList.remove("w-full");

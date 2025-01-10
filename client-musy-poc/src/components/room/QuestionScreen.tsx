@@ -59,6 +59,7 @@ export const QuestionScreen: React.FC = () => {
   const [displayedComponent, setDisplayedComponent] =
     useState<string>("countdown");
   const [users, setUsers] = useState(initialUsers);
+  console.log(users);
 
   useEffect(() => {
     if (startCountdown > 0) {
@@ -94,7 +95,7 @@ export const QuestionScreen: React.FC = () => {
                 }));
 
                 const sortedUsers = [...updatedUsers].sort(
-                  (a, b) => b.score - a.score
+                  (a, b) => b.score - a.score,
                 );
 
                 return sortedUsers.map((user, index) => ({
@@ -117,7 +118,7 @@ export const QuestionScreen: React.FC = () => {
                 setTimeLeft(QUESTION_DURATION); // Reset
                 setQuestionNumber((prev) => prev + 1);
                 const progressBar = document.querySelector(
-                  ".progress-bar"
+                  ".progress-bar",
                 ) as HTMLElement;
                 if (progressBar) {
                   progressBar.classList.remove("w-full");
