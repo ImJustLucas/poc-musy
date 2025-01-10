@@ -44,13 +44,12 @@ export default function Home() {
 
         const resData = await response.json();
 
-        // Vous pouvez maintenant décommenter et utiliser la redirection
         const { success, data } = await roomService.joinRoom(
           resData.data.roomSocketId,
           {
             pseudo,
             clientSocketId: socketId,
-          },
+          }
         );
 
         if (success) {

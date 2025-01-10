@@ -15,6 +15,11 @@ interface GetRoomResponse {
   data: Room;
 }
 
+interface StartGameResponse {
+  success: boolean;
+  data: Room;
+}
+
 export class RoomService extends BaseFetcher {
   async createRoom(pseudo: string): Promise<CreateRoomResponse> {
     return this.post<CreateRoomResponse>("/room", { pseudo });
@@ -32,6 +37,10 @@ export class RoomService extends BaseFetcher {
 
   async getRoom(roomId: string): Promise<GetRoomResponse> {
     return this.get<GetRoomResponse>(`/room/${roomId}`);
+  }
+
+  async startGame(roomId: string): Promise<StartGameResponse> {
+    return this.get(`/room/start/${roomId}`);
   }
 }
 

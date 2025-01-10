@@ -9,9 +9,6 @@ type APIResponse<K> = {
 export default async function JoinRoom() {
   const data = await fetch("http://localhost:1337/room");
   const response = (await data.json()) as APIResponse<RoomType[]>;
-  console.log(response.success);
-  console.log(response.data);
-  // const [roomCode, setRoomCode] = useState("");
 
   return (
     <div className="bg-blue700 w-full h-full flex justify-center px-4">

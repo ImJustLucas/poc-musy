@@ -9,10 +9,14 @@ import { Model } from "mongoose";
 import { Server, Socket } from "socket.io";
 import { WebSocketServer } from "@nestjs/websockets";
 import { RoomTypes } from "@/shared/shared-types";
+import { RoomGateway } from "./gateway/room.gateway";
 
 @Injectable()
 export class RoomService {
-  constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {
+  constructor(
+    @InjectModel(Room.name) private roomModel: Model<Room>,
+    private roomGateway: RoomGateway,
+  ) {
     this.Members = {};
   }
   @WebSocketServer() server: Server;
@@ -53,11 +57,13 @@ export class RoomService {
   }
 
   subscribeSocket(data: { client: Socket; pseudo: string }, room: Room) {
-    console.log("Send truc to client");
-    data.client.broadcast.emit("room:user-join", {
+    const roomId = `room_${room._id}`;
+    data.client.join(roomId);
+    this.sendMessage(room, "room:user-join", {
       newUser: data.pseudo,
+      timestamp: new Date(),
+      roomId: room._id,
     });
-    return data.client.join(`room_${room._id}`);
   }
 
   async join(roomId: string, user: { pseudo: string; clientSocketId: string }) {
@@ -123,5 +129,16 @@ export class RoomService {
     await this.removeUserFromRooms(socket.id);
 
     return;
+  }
+
+  sendMessage<T>(room: Room, event: string, message?: T) {
+    return this.roomGateway.server.to(`room_${room._id}`).emit(event, message);
+  }
+
+  async startGame(roomSocketId: string) {
+    return await this.roomModel.findOneAndUpdate(
+      { roomSocketId },
+      { state: RoomTypes.RoomState.IN_GAME },
+    );
   }
 }

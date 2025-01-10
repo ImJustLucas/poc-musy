@@ -1,6 +1,7 @@
 "use client";
 
-import { socket as socketInstance } from "@/services/socket.io";
+import { socket, socket as socketInstance } from "@/services/socket.io";
+import { Room } from "@/shared/types/room";
 import React, {
   createContext,
   useContext,
@@ -14,6 +15,11 @@ interface UserContextType {
   socketId: string;
   setPseudo: (pseudo: string) => void;
   setSocketId: (socketId: string) => void;
+  rooms: {
+    get: Record<string, Room>;
+    set: (room: Room) => void;
+    getOneById: (id: string) => Room;
+  };
 }
 
 interface UserProviderProps {
@@ -25,6 +31,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserProvider({ children }: UserProviderProps) {
   const [pseudo, setPseudo] = useState<string>("");
   const [socketId, setSocketId] = useState<string>(socketInstance.id ?? "");
+  const [rooms, setRooms] = useState<Record<string, Room>>({});
 
   useEffect(() => {
     if (socketId === "" && socketInstance.id) {
@@ -37,6 +44,16 @@ export function UserProvider({ children }: UserProviderProps) {
     socketId,
     setPseudo,
     setSocketId,
+    rooms: {
+      get: rooms,
+      set: (room: Room) => {
+        setRooms((prev) => ({
+          ...prev,
+          [room.roomSocketId]: room,
+        }));
+      },
+      getOneById: (id: string) => rooms[id],
+    },
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -29,8 +29,6 @@ export class RoomController {
   async getRoomBySocketName(@Param("roomSocketId") roomSocketId: string) {
     const room = await this._roomService.getRoomBySocketId(roomSocketId);
 
-    console.log("ROOM", room);
-
     return {
       success: true,
       data: room,
@@ -52,7 +50,6 @@ export class RoomController {
     @Param("roomSocketId") roomSocketId: string,
     @Body() user: { pseudo: string; clientSocketId: string },
   ) {
-    console.log("user", user);
     if (!roomSocketId)
       return new BadRequestException("roomSocketId is missing");
 
@@ -67,6 +64,16 @@ export class RoomController {
     return {
       success: true,
       data: joinedRoom,
+    };
+  }
+
+  @Get("/start/:roomSocketId")
+  async startGame(@Param("roomSocketId") roomSocketId: string) {
+    const room = this._roomService.startGame(roomSocketId);
+
+    return {
+      success: true,
+      data: room,
     };
   }
 

@@ -38,11 +38,6 @@ export class RoomGateway
     this.roomService.unsubscribeSocket(client);
   }
 
-  @SubscribeMessage("room:test")
-  async test(@ConnectedSocket() client: Socket, @MessageBody() roomId: string) {
-    this.logger.log("Test réussi");
-  }
-
   @SubscribeMessage("room:subscribe")
   async subscribe(
     @ConnectedSocket() client: Socket,
@@ -58,5 +53,17 @@ export class RoomGateway
       { client, pseudo: data.pseudo },
       await this.roomService.validateRoom(data.roomId),
     );
+  }
+
+  @SubscribeMessage("room:start-game")
+  async startGame(
+    @ConnectedSocket() client: Socket,
+    @MessageBody()
+    data: {
+      roomId: string;
+    },
+  ) {
+    if (!data.roomId) return;
+    console.log("ouais la game commence");
   }
 }
