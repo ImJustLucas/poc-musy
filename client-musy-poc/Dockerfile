@@ -13,7 +13,7 @@ RUN pnpm run build
 FROM node:20-alpine
 WORKDIR /app
 
-COPY --from=builder /usr/local/bin/pnpm /usr/local/bin/pnpm
+RUN npm install -g pnpm
 COPY --from=builder /app ./
 RUN pnpm install --production
 
